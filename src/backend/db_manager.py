@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from typing import Any
 
 # load the classes from models.py
-from table_model import Post, Comment
+from backend.table_model import Post, Comment
 
 # LOAD THIS STUPID THING
 load_dotenv()
