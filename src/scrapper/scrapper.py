@@ -6,8 +6,8 @@ from datetime import datetime
 import praw
 from praw.models import MoreComments, Submission, Comment as PrawComment
 
-from backend.table_model import Post, Comment
-from backend.db_manager import insert_post, insert_comment
+from database.table_model import Post, Comment
+from database.db_manager import insert_post, insert_comment
 
 # Load environment variables
 load_dotenv()
