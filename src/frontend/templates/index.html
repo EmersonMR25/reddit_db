@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YOLO Database</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="logo">YOLO Database</div>
+    </header>
+
+    <main class="hero">
+        <div class="hero-text">
+            <h1>Welcome to the YOLO Database</h1>
+
+            <h2>Total Entries: <span id="entry-count">Loading...</span></h2>
+            <p>This counter reflects the total number of entries (posts + comments) stored from Reddit.</p>
+
+            <div class="buttons">
+                <a class="btn" href="https://github.com/EmersonMR25/reddit_db" target="_blank">GitHub Repo</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function fetchCount() {
+            try {
+                const response = await fetch("/api/count");
+                const data = await response.json();
+                document.getElementById("entry-count").textContent = data.total.toLocaleString();
+            } catch (error) {
+                console.error("Failed to load count:", error);
+                document.getElementById("entry-count").textContent = "Error";
+            }
+        }
+
+        window.onload = fetchCount;
+    </script>
+</body>
+
+</html>
