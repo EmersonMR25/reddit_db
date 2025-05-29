@@ -1,4 +1,6 @@
 import os
+import time
+from typing import List
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
@@ -34,22 +36,50 @@ def get_supabase_client() -> Client:
     """
     return supabase
 
-def insert_post(post: Post) -> None:
-    """
-    Inserts data into the POST table.
-    """
-    try:
-        data: dict[str, Any] = post.to_dict()
-        supabase.table("posts").insert(data).execute()
-    except Exception as e:
-        print(f"Failed to insert post: {e}")
+MAX_RETRIES: int = 3
+RETRY_WAIT_SECONDS: int = 2
 
-def insert_comment(comment: Comment) -> None:
+def insert_posts(posts: List[Post]) -> None:
     """
-    Inserts data into the COMMENT table.
+    Inserts a list of Post objects into the Supabase 'posts' table in batch.
+    Retries on connection errors.
     """
-    try:
-        data: dict[str, Any] = comment.to_dict()
-        supabase.table("comments").insert(data).execute()
-    except Exception as e:
-        print(f"Failed to insert post: {e}")
+    if not posts:
+        return
+
+    data: List[dict[str, Any]] = [post.to_dict() for post in posts]
+
+    for attempt in range(MAX_RETRIES):
+        try:
+            supabase.table("posts").insert(data).execute()
+            return  # success, exit function
+        except Exception as e:
+            print(f"[Attempt {attempt + 1}] Failed to insert posts: {e}")
+            if "ConnectionTerminated" in str(e) and attempt < MAX_RETRIES - 1:
+                print(f"Retrying in {RETRY_WAIT_SECONDS} seconds...")
+                time.sleep(RETRY_WAIT_SECONDS)
+            else:
+                raise
+
+
+def insert_comments(comments: List[Comment]) -> None:
+    """
+    Inserts a list of Comment objects into the Supabase 'comments' table in batch.
+    Retries on connection errors.
+    """
+    if not comments:
+        return
+
+    data: List[dict[str, Any]] = [comment.to_dict() for comment in comments]
+
+    for attempt in range(MAX_RETRIES):
+        try:
+            supabase.table("comments").insert(data).execute()
+            return  # success
+        except Exception as e:
+            print(f"[Attempt {attempt + 1}] Failed to insert comments: {e}")
+            if "ConnectionTerminated" in str(e) and attempt < MAX_RETRIES - 1:
+                print(f"Retrying in {RETRY_WAIT_SECONDS} seconds...")
+                time.sleep(RETRY_WAIT_SECONDS)
+            else:
+                raise
