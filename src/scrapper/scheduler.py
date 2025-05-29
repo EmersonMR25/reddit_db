@@ -1,3 +1,12 @@
+"""
+Schedules and automates periodic scraping of specific subreddits every 6 hours,
+then inserts the scraped data into Supabase.
+
+Author: AbdielDev  
+Version: 1.0.0  
+Last Updated: 2025-05-22
+"""
+
 from apscheduler.schedulers.blocking import BlockingScheduler
 from scrapper.scrapper import scrape_subreddit
 from database.db_manager import insert_posts, insert_comments

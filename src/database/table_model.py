@@ -1,3 +1,14 @@
+"""
+Defines data models for Reddit posts and comments used for scraping and storing
+information into the database. Includes utility methods for transforming PRAW
+objects into serializable dataclass instances.
+
+Author: AbdielDev  
+Version: 1.0.0  
+Last Updated: 2025-05-22
+"""
+
+# Libraries
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
@@ -50,7 +61,7 @@ class Post:
     
     def to_dict(post: "Post") -> dict[str, Any]:
         """
-        Converts a Post instance to a dictionary format for storage or serialization.
+        Converts a Post instance to a dictionary format for storage.
 
         Args:
             post (Post): The Post instance to convert.
@@ -112,7 +123,7 @@ class Comment:
     
     def to_dict(comment: "Comment") -> dict[str, Any]:
         """
-        Converts a Comment instance to a dictionary format for storage or serialization.
+        Converts a Comment instance to a dictionary format for storage.
 
         Args:
             comment (Comment): The Comment instance to convert.

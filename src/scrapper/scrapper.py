@@ -1,12 +1,21 @@
+"""
+Fetches Reddit posts and comments using PRAW, processes them into structured objects,
+and prepares them for insertion into a Supabase database.
+
+Author: AbdielDev  
+Version: 1.0.0  
+Last Updated: 2025-05-22
+"""
+
 from typing import List
 import os
 from dotenv import load_dotenv
 from datetime import datetime
-
 import praw
 from praw.models import MoreComments, Submission, Comment as PrawComment
-
+# load the classes from table_model.py
 from database.table_model import Post, Comment
+# load the classes from db_manager.py
 from database.db_manager import insert_posts, insert_comments
 
 # Load environment variables
@@ -27,16 +36,15 @@ print("Reddit client initialized successfully.")
 
 def scrape_subreddit(subreddit_name: str, post_limit: int = 5) -> tuple[list[Post], list[Comment]]:
     subreddit = reddit.subreddit(subreddit_name)
-
+    # Use list to store posts and comments to store a batch and then inset them all at once
+    # Do this to avoid hitting the rate limit of the Reddit/Praw/Supabase API
     posts: list[Post] = []
     comments: list[Comment] = []
 
     for submission in subreddit.hot(limit=post_limit):
         try:
-            # Use the reusable constructor
             post = Post.from_reddit_post(submission)
             posts.append(post)
-
             # Load and extract comments
             submission.comments.replace_more(limit=0)
             for comment in submission.comments.list():

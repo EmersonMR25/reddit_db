@@ -1,12 +1,19 @@
+"""
+Handles interactions with the Supabase database, including client initialization
+and inserting batches of Reddit posts and comments with automatic retry logic.
+
+Author: AbdielDev  
+Version: 1.0.0  
+Last Updated: 2025-05-22
+"""
+# Libraries
 import os
 import time
 from typing import List
 from supabase import create_client, Client
 from dotenv import load_dotenv
-
 from typing import Any
-
-# load the classes from models.py
+# load the classes from table_model.py
 from database.table_model import Post, Comment
 
 # LOAD THIS STUPID THING
