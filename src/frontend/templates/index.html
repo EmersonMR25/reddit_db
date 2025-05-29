@@ -11,18 +11,16 @@
 <body>
     <header class="navbar">
         <div class="logo">YOLO Database</div>
+        <div class="buttons">
+            <a class="btn" href="https://github.com/EmersonMR25/reddit_db" target="_blank">GitHub Repo</a>
+        </div>
     </header>
 
     <main class="hero">
         <div class="hero-text">
-            <h1>Welcome to the YOLO Database</h1>
-
-            <h2>Total Entries: <span id="entry-count">Loading...</span></h2>
-            <p>This counter reflects the total number of entries (posts + comments) stored from Reddit.</p>
-
-            <div class="buttons">
-                <a class="btn" href="https://github.com/EmersonMR25/reddit_db" target="_blank">GitHub Repo</a>
-            </div>
+            <h2><span id="entry-count">...</span></h2>
+            <p>*Database that scrapes "financial" data from subreddit spaces. This counter reflects the total number of
+                entries (posts + comments) stored.</p>
         </div>
     </main>
 
@@ -31,7 +29,13 @@
             try {
                 const response = await fetch("/api/count");
                 const data = await response.json();
-                document.getElementById("entry-count").textContent = data.total.toLocaleString();
+                const countElement = document.getElementById("entry-count");
+                countElement.textContent = data.total.toLocaleString();
+
+                // Trigger animation after content loads
+                setTimeout(() => {
+                    countElement.classList.add("animated");
+                }, 100);
             } catch (error) {
                 console.error("Failed to load count:", error);
                 document.getElementById("entry-count").textContent = "Error";

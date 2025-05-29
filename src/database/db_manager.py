@@ -92,6 +92,9 @@ def insert_comments(comments: List[Comment]) -> None:
                 raise
 
 def count_posts_and_comments() -> dict:
+    """
+    Return the total number of entries stored in the database.
+    """
     post_count = supabase.table("posts").select("post_id", count="exact").execute().count
     comment_count = supabase.table("comments").select("comment_id", count="exact").execute().count
     total = (post_count or 0) + (comment_count or 0)

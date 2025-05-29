@@ -14,9 +14,9 @@ from database.db_manager import count_posts_and_comments
 
 app = FastAPI()
 
+# Correct static files mounting
 app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 templates = Jinja2Templates(directory="frontend/templates")
-
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
