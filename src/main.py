@@ -12,10 +12,15 @@ Last Updated: 2025-05-22
 
 from backend.web_app import app  # FastAPI app instance
 from scrapper.scheduler import scheduler, scheduled_scrape
+import threading
 
-# Run initial scrape and start the scheduler
-print("🔄 Running initial scrape...")
-# scheduled_scrape()
+def start_scraper() -> None:
+    print("🔄 Running initial scrape...")
+    scheduled_scrape()
 
-print("⏱️ Starting scheduler...")
-# scheduler.start()
+    print("⏱️ Starting scheduler...")
+    scheduler.start()
+
+# Run the scraper and scheduler in a separate thread
+scraper_thread = threading.Thread(target=start_scraper, daemon=True)
+scraper_thread.start()

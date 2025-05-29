@@ -8,6 +8,7 @@ Last Updated: 2025-05-22
 """
 # Libraries
 import os
+from typing import Set
 import time
 from typing import List
 from supabase import create_client, Client
@@ -104,3 +105,13 @@ def count_posts_and_comments() -> dict:
         "comments": comment_count or 0,
         "total": total,
     }
+
+
+def get_all_post_ids() -> Set[str]:
+    """Fetches all existing post IDs from the Supabase 'posts' table."""
+    response = supabase.table("posts").select("post_id").execute()
+    
+    if not response.data:
+        return set()
+    
+    return {item["post_id"] for item in response.data}

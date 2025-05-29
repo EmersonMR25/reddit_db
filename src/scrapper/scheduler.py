@@ -23,7 +23,7 @@ def scheduled_scrape() -> None:
     
     for subreddit in subreddits:
         print(f"Scraping: {subreddit}")
-        posts, comments = scrape_subreddit(subreddit, post_limit=50)
+        posts, comments = scrape_subreddit(subreddit, post_limit=25)
 
         print(f"Inserting {len(posts)} posts and {len(comments)} comments for {subreddit}...")
         insert_posts(posts)
