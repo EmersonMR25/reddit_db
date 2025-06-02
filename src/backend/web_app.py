@@ -12,9 +12,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from database.db_manager import count_posts_and_comments
 
-app = FastAPI()
+app: FastAPI = FastAPI()
 
-# Correct static files mounting
+# Static files mounting
 app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 templates = Jinja2Templates(directory="frontend/templates")
 

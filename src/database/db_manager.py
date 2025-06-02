@@ -44,6 +44,8 @@ def get_supabase_client() -> Client:
     """
     return supabase
 
+# The feature of retrying on connection errors is useful for batch inserts, and was implemented by 
+# Chatgpt. It allows the application to handle errors where the app disconnects from the db.
 MAX_RETRIES: int = 3
 RETRY_WAIT_SECONDS: int = 2
 
@@ -92,13 +94,13 @@ def insert_comments(comments: List[Comment]) -> None:
             else:
                 raise
 
-def count_posts_and_comments() -> dict:
+def count_posts_and_comments() -> dict[str, int]:
     """
     Return the total number of entries stored in the database.
     """
-    post_count = supabase.table("posts").select("post_id", count="exact").execute().count
-    comment_count = supabase.table("comments").select("comment_id", count="exact").execute().count
-    total = (post_count or 0) + (comment_count or 0)
+    post_count: int = supabase.table("posts").select("post_id", count="exact").execute().count
+    comment_count: int = supabase.table("comments").select("comment_id", count="exact").execute().count
+    total: int = (post_count or 0) + (comment_count or 0)
 
     return {
         "posts": post_count or 0,
